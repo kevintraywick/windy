@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WindWise — Is Wind Power Right for Your Home?</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sky:    #0f4c81;
+      --sky-lt: #1a6fad;
+      --teal:   #0d9488;
+      --teal-lt:#14b8a6;
+      --bg:     #f0f4f8;
+      --panel:  #ffffff;
+      --border: #d1dce8;
+      --text:   #1e293b;
+      --muted:  #64748b;
+      --good:   #16a34a;
+      --warn:   #d97706;
+      --poor:   #dc2626;
+      --card-r: 10px;
+    }
+
+    html, body { height: 100%; font-family: 'Segoe UI', system-ui, sans-serif; color: var(--text); background: var(--bg); }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, var(--sky) 0%, var(--sky-lt) 60%, var(--teal) 100%);
+      color: #fff;
+      padding: 18px 24px 14px;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    header h1 { font-size: 1.7rem; font-weight: 700; letter-spacing: -0.5px; }
+    header h1 span { opacity: 0.75; font-weight: 400; }
+    header p { font-size: 0.9rem; opacity: 0.85; }
+
+    /* ── Search bar ── */
+    .search-wrap {
+      background: var(--sky);
+      padding: 12px 24px 16px;
+      display: flex; justify-content: center;
+    }
+    .search-bar {
+      display: flex; width: 100%; max-width: 640px; gap: 8px;
+    }
+    .search-bar input {
+      flex: 1; padding: 10px 14px; border: none; border-radius: 8px;
+      font-size: 1rem; outline: none; box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+    .search-bar button {
+      padding: 10px 20px; background: var(--teal); color: #fff;
+      border: none; border-radius: 8px; font-size: 1rem; font-weight: 600;
+      cursor: pointer; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      transition: background 0.15s;
+    }
+    .search-bar button:hover { background: var(--teal-lt); }
+
+    /* ── Main layout ── */
+    .main {
+      display: flex; height: calc(100vh - 148px); overflow: hidden;
+    }
+
+    /* ── Map ── */
+    #map { flex: 1 1 0; min-width: 0; }
+
+    /* ── Side panel ── */
+    .panel {
+      width: 340px; flex-shrink: 0;
+      background: var(--panel); border-left: 1px solid var(--border);
+      overflow-y: auto; padding: 16px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+
+    .card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--card-r); padding: 14px;
+    }
+    .card-title {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
+    }
+
+    /* form elements */
+    label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--muted); margin-bottom: 3px; margin-top: 8px; }
+    label:first-child { margin-top: 0; }
+    select, input[type="number"], input[type="text"] {
+      width: 100%; padding: 7px 10px; border: 1px solid var(--border);
+      border-radius: 6px; font-size: 0.9rem; background: #fff; color: var(--text);
+      outline: none;
+    }
+    select:focus, input:focus { border-color: var(--teal-lt); }
+
+    .input-unit { display: flex; gap: 6px; align-items: center; }
+    .input-unit input { flex: 1; }
+    .input-unit span { font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+
+    /* ── Results ── */
+    #results { display: none; }
+
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stat {
+      background: #fff; border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px; text-align: center;
+    }
+    .stat .val { font-size: 1.25rem; font-weight: 700; color: var(--sky); }
+    .stat .lbl { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+
+    .savings-banner {
+      background: linear-gradient(135deg, var(--good), #15803d);
+      color: #fff; border-radius: 10px; padding: 14px; text-align: center;
+    }
+    .savings-banner .big { font-size: 2rem; font-weight: 800; }
+    .savings-banner .sub { font-size: 0.8rem; opacity: 0.85; margin-top: 2px; }
+
+    .wind-class {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-weight: 700; font-size: 1rem; padding: 4px 12px;
+      border-radius: 20px; margin-top: 4px;
+    }
+
+    /* monthly chart */
+    .chart-wrap { overflow-x: auto; }
+    .bar-chart { display: flex; align-items: flex-end; gap: 3px; height: 70px; }
+    .bar-col { display: flex; flex-direction: column; align-items: center; flex: 1; }
+    .bar { width: 100%; border-radius: 3px 3px 0 0; transition: height 0.4s; min-height: 2px; }
+    .bar-lbl { font-size: 0.55rem; color: var(--muted); margin-top: 2px; }
+
+    /* wind rose */
+    #wind-rose-svg { display: block; margin: 0 auto; }
+
+    .note { font-size: 0.72rem; color: var(--muted); line-height: 1.5; }
+
+    /* loading overlay */
+    #loader {
+      display: none; position: fixed; inset: 0; background: rgba(15,76,129,0.55);
+      z-index: 9999; justify-content: center; align-items: center;
+    }
+    #loader.show { display: flex; }
+    .spinner {
+      width: 52px; height: 52px; border: 5px solid rgba(255,255,255,0.3);
+      border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* mobile */
+    @media (max-width: 700px) {
+      .main { flex-direction: column; height: auto; }
+      #map { height: 50vw; min-height: 220px; }
+      .panel { width: 100%; border-left: none; border-top: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+
+<div id="loader"><div class="spinner"></div></div>
+
+<header>
+  <h1>🌬️ WindWise <span>for Homeowners</span></h1>
+  <p>Enter your address to see if a small wind turbine makes financial sense for your home.</p>
+</header>
+
+<div class="search-wrap">
+  <div class="search-bar">
+    <input id="addr-input" type="text" placeholder="Enter your address or ZIP code…" />
+    <button id="analyze-btn">Analyze →</button>
+  </div>
+</div>
+
+<div class="main">
+  <div id="map"></div>
+
+  <div class="panel">
+
+    <!-- Setup -->
+    <div class="card">
+      <div class="card-title">⚙️ Your Setup</div>
+
+      <label>Turbine size</label>
+      <select id="turbine-sel">
+        <option value="micro">Micro DIY (1 m rotor, ~75 W) — ~$300</option>
+        <option value="small" selected>Small Residential (1.8 m, ~400 W) — ~$900</option>
+        <option value="mid">Mid Residential (3 m, ~1 kW) — ~$3,000</option>
+        <option value="large">Full Residential (5 m, ~3 kW) — ~$9,500</option>
+      </select>
+
+      <label>Tower / mounting height</label>
+      <div class="input-unit">
+        <input id="height-input" type="number" value="20" min="5" max="60" step="1">
+        <span>feet above ground</span>
+      </div>
+
+      <label>Monthly electric bill</label>
+      <div class="input-unit">
+        <input id="bill-input" type="number" value="150" min="10" max="1000" step="5">
+        <span>$/month</span>
+      </div>
+
+      <label>
+        Anemometer reading <em style="font-weight:400;color:var(--muted)">(optional)</em>
+      </label>
+      <div class="input-unit">
+        <input id="anem-input" type="number" placeholder="leave blank to use historical data" min="0" max="100" step="0.1">
+        <span>mph avg</span>
+      </div>
+    </div>
+
+    <!-- Placeholder before analysis -->
+    <div id="placeholder" class="card note" style="text-align:center;padding:24px 14px;">
+      <div style="font-size:2rem;margin-bottom:8px;">🗺️</div>
+      Enter your address above and click <strong>Analyze</strong> to see your personalized wind power estimate.
+    </div>
+
+    <!-- Results (hidden until analyzed) -->
+    <div id="results">
+
+      <!-- Wind summary -->
+      <div class="card">
+        <div class="card-title">💨 Wind at Your Location</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div id="avg-wind-val" style="font-size:1.8rem;font-weight:800;color:var(--sky);">—</div>
+            <div style="font-size:0.75rem;color:var(--muted);">avg wind at your height</div>
+          </div>
+          <div id="wind-class-badge" class="wind-class">—</div>
+        </div>
+        <div style="margin-top:10px;">
+          <div class="card-title" style="margin-bottom:6px;">Monthly avg wind speed (mph)</div>
+          <div class="chart-wrap">
+            <div class="bar-chart" id="monthly-chart"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wind rose -->
+      <div class="card">
+        <div class="card-title">🧭 Prevailing Wind Direction</div>
+        <svg id="wind-rose-svg" width="140" height="140" viewBox="0 0 140 140"></svg>
+        <div class="note" style="margin-top:6px;text-align:center">Face your turbine into the most frequent wind direction.</div>
+      </div>
+
+      <!-- Savings banner -->
+      <div class="savings-banner">
+        <div class="sub">Estimated annual savings</div>
+        <div class="big" id="annual-savings">$—</div>
+        <div class="sub" id="savings-note">based on your location &amp; setup</div>
+      </div>
+
+      <!-- Stats grid -->
+      <div class="stat-grid">
+        <div class="stat">
+          <div class="val" id="stat-kwh">—</div>
+          <div class="lbl">kWh / year produced</div>
+        </div>
+        <div class="stat">
+          <div class="val" id="stat-rate">—</div>
+          <div class="lbl">¢/kWh (state avg)</div>
+        </div>
+        <div class="stat">
+          <div class="val" id="stat-pct">—</div>
+          <div class="lbl">of your bill offset</div>
+        </div>
+        <div class="stat">
+          <div class="val" id="stat-payback">—</div>
+          <div class="lbl">year payback</div>
+        </div>
+      </div>
+
+      <!-- 20-year projection -->
+      <div class="card">
+        <div class="card-title">📈 20-Year Projection</div>
+        <div class="stat-grid">
+          <div class="stat">
+            <div class="val" id="stat-20yr">—</div>
+            <div class="lbl">total savings (3% rate increase/yr)</div>
+          </div>
+          <div class="stat">
+            <div class="val" id="stat-co2">—</div>
+            <div class="lbl">tons CO₂ avoided</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="card note">
+        <strong>Assumptions &amp; notes</strong><br><br>
+        • Wind data: ERA5 reanalysis via Open-Meteo, last 12 months of hourly readings.<br>
+        • Electricity rate: EIA 2024 state average residential rate.<br>
+        • Assumes net metering (excess generation credited at retail rate).<br>
+        • Wind speed scaled from 10 m to your tower height using the ¹⁄₇ power law.<br>
+        • Does not include installation, permits, or maintenance (~$200/yr).<br>
+        • Turbine output estimated using Betz-limited power curve.<br>
+        <br>
+        <a href="https://www.nrel.gov/wind/small-wind.html" target="_blank" style="color:var(--teal);">NREL Small Wind Resource Center →</a>
+      </div>
+    </div>
+
+  </div><!-- /panel -->
+</div><!-- /main -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════════════════════
+
+// Turbine specs: [rotor_radius_m, rated_power_W, cut_in_ms, cut_out_ms, Cp, low_cost, high_cost]
+const TURBINES = {
+  micro: { label:'Micro DIY',  r:0.50, Prated:75,    vin:2.5, vout:18, Cp:0.30, costLo:200,  costHi:400  },
+  small: { label:'Small Res.', r:0.90, Prated:400,   vin:2.5, vout:20, Cp:0.32, costLo:700,  costHi:1100 },
+  mid:   { label:'Mid Res.',   r:1.50, Prated:1000,  vin:2.5, vout:22, Cp:0.35, costLo:2500, costHi:3500 },
+  large: { label:'Full Res.',  r:2.50, Prated:3000,  vin:2.5, vout:25, Cp:0.38, costLo:8000, costHi:11000 },
+};
+
+// EIA 2024 avg residential rates (cents/kWh) by state abbreviation
+const STATE_RATES = {
+  AL:13.2,AK:22.7,AZ:13.1,AR:10.8,CA:28.0,CO:13.7,CT:27.0,DE:14.7,FL:13.5,GA:12.4,
+  HI:39.8,ID:10.3,IL:14.0,IN:13.1,IA:12.0,KS:13.2,KY:11.7,LA:10.2,ME:24.0,MD:15.0,
+  MA:26.0,MI:17.0,MN:14.0,MS:12.0,MO:12.8,MT:12.5,NE:11.2,NV:12.0,NH:25.0,NJ:17.0,
+  NM:13.0,NY:22.0,NC:12.5,ND:11.0,OH:13.5,OK:10.5,OR:11.5,PA:15.5,RI:28.0,SC:13.5,
+  SD:12.0,TN:11.0,TX:13.0,UT:11.0,VT:22.0,VA:12.5,WA:10.5,WV:12.0,WI:15.5,WY:11.5,DC:15.0
+};
+
+const AIR_DENSITY = 1.225; // kg/m³ at sea level
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DIRS = ['N','NE','E','SE','S','SW','W','NW'];
+
+// Wind class thresholds (mph)
+const WIND_CLASSES = [
+  { min:0,  max:4,  label:'Poor',      color:'#dc2626', tip:'Not economically viable for turbines.' },
+  { min:4,  max:7,  label:'Marginal',  color:'#d97706', tip:'Borderline — small turbines only.' },
+  { min:7,  max:10, label:'Fair',      color:'#ca8a04', tip:'A small turbine can offset some bills.' },
+  { min:10, max:13, label:'Good',      color:'#16a34a', tip:'Good wind resource — solid economics.' },
+  { min:13, max:999,label:'Excellent', color:'#0d9488', tip:'Excellent site! Strong ROI expected.' },
+];
+
+// ═══════════════════════════════════════════════════════
+// MAP SETUP
+// ═══════════════════════════════════════════════════════
+const map = L.map('map', { zoomControl:true }).setView([39.5, -98.35], 4);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+  maxZoom: 19
+}).addTo(map);
+
+let siteMarker = null;
+let windCircle = null;
+
+function placeMarker(lat, lon, color, avgMph) {
+  if (siteMarker) map.removeLayer(siteMarker);
+  if (windCircle) map.removeLayer(windCircle);
+
+  siteMarker = L.circleMarker([lat, lon], {
+    radius: 10, fillColor: color, color: '#fff',
+    weight: 2, opacity: 1, fillOpacity: 0.9
+  }).addTo(map).bindPopup(`<b>${avgMph.toFixed(1)} mph</b> avg wind`).openPopup();
+
+  windCircle = L.circle([lat, lon], {
+    radius: 8000, fillColor: color, color: color,
+    weight: 1, opacity: 0.4, fillOpacity: 0.12
+  }).addTo(map);
+
+  map.setView([lat, lon], 10);
+}
+
+// ═══════════════════════════════════════════════════════
+// GEOCODING (Nominatim)
+// ═══════════════════════════════════════════════════════
+async function geocode(query) {
+  const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&addressdetails=1&limit=1`;
+  const res = await fetch(url, { headers: { 'Accept-Language':'en' } });
+  const data = await res.json();
+  if (!data.length) throw new Error('Address not found. Try a ZIP code or city, state.');
+  const item = data[0];
+  const addr = item.address;
+  // Extract US state abbreviation
+  const stateCode = addr.state_code || addr['ISO3166-2-lvl4']?.split('-')[1] || null;
+  return { lat: parseFloat(item.lat), lon: parseFloat(item.lon), state: stateCode?.toUpperCase() };
+}
+
+// ═══════════════════════════════════════════════════════
+// WIND DATA (Open-Meteo Historical / ERA5)
+// ═══════════════════════════════════════════════════════
+async function fetchWindData(lat, lon) {
+  // Get past 12 full months of hourly wind speed + direction at 10m
+  const end   = new Date(); end.setDate(end.getDate() - 2); // yesterday-ish
+  const start = new Date(end); start.setFullYear(start.getFullYear() - 1);
+  const fmt = d => d.toISOString().slice(0,10);
+
+  const url = `https://archive-api.open-meteo.com/v1/archive?` +
+    `latitude=${lat.toFixed(4)}&longitude=${lon.toFixed(4)}` +
+    `&start_date=${fmt(start)}&end_date=${fmt(end)}` +
+    `&hourly=wind_speed_10m,wind_direction_10m` +
+    `&wind_speed_unit=mph&timezone=auto`;
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Could not fetch wind data from Open-Meteo.');
+  const data = await res.json();
+  return {
+    speeds:     data.hourly.wind_speed_10m,
+    directions: data.hourly.wind_direction_10m,
+    times:      data.hourly.time,
+  };
+}
+
+// ═══════════════════════════════════════════════════════
+// HEIGHT CORRECTION (1/7 power law)
+// ═══════════════════════════════════════════════════════
+function heightFactor(heightFt) {
+  const hM = heightFt * 0.3048; // feet → meters
+  return Math.pow(hM / 10, 1/7);
+}
+
+// ═══════════════════════════════════════════════════════
+// WIND POWER CALCULATION
+// ═══════════════════════════════════════════════════════
+function mphToMs(mph) { return mph * 0.44704; }
+
+function calcPower(vMph, turbine) {
+  const vMs = mphToMs(vMph);
+  if (vMs < turbine.vin || vMs > turbine.vout) return 0;
+  const area = Math.PI * turbine.r * turbine.r;
+  const raw  = 0.5 * AIR_DENSITY * area * turbine.Cp * Math.pow(vMs, 3);
+  return Math.min(raw, turbine.Prated); // cap at rated
+}
+
+// ═══════════════════════════════════════════════════════
+// MONTHLY AGGREGATION
+// ═══════════════════════════════════════════════════════
+function buildMonthlyData(times, speeds) {
+  // returns array of 12 average wind speeds by month
+  const sums = new Array(12).fill(0);
+  const cnts = new Array(12).fill(0);
+  for (let i = 0; i < times.length; i++) {
+    if (speeds[i] == null) continue;
+    const mo = new Date(times[i]).getMonth();
+    sums[mo] += speeds[i];
+    cnts[mo]++;
+  }
+  return sums.map((s, i) => cnts[i] ? s / cnts[i] : 0);
+}
+
+// ═══════════════════════════════════════════════════════
+// WIND ROSE (8 directions)
+// ═══════════════════════════════════════════════════════
+function buildWindRose(directions) {
+  const bins = new Array(8).fill(0);
+  for (const d of directions) {
+    if (d == null) continue;
+    const idx = Math.round(d / 45) % 8;
+    bins[idx]++;
+  }
+  const total = bins.reduce((a,b)=>a+b, 0);
+  return bins.map(b => b / total);
+}
+
+function drawWindRose(freqs) {
+  const svg = document.getElementById('wind-rose-svg');
+  svg.innerHTML = '';
+  const cx = 70, cy = 70, maxR = 52;
+  const colors = ['#0f4c81','#1a6fad','#0d9488','#14b8a6','#16a34a','#4ade80','#ca8a04','#fbbf24'];
+
+  // background circle
+  const bgCirc = makeSVG('circle', { cx, cy, r: maxR, fill:'#e2e8f0', stroke:'#cbd5e1', 'stroke-width':1 });
+  svg.appendChild(bgCirc);
+
+  // reference rings
+  for (const rf of [0.33, 0.66, 1]) {
+    const c = makeSVG('circle', { cx, cy, r: maxR*rf, fill:'none', stroke:'#cbd5e1', 'stroke-width':0.5 });
+    svg.appendChild(c);
+  }
+
+  // petals (polygon per direction)
+  freqs.forEach((f, i) => {
+    const angleDeg = i * 45 - 90;
+    const halfW    = 20; // half-width degrees
+    const r        = f * maxR;
+
+    const toXY = (deg, radius) => {
+      const rad = deg * Math.PI / 180;
+      return [cx + radius * Math.cos(rad), cy + radius * Math.sin(rad)];
+    };
+
+    const [lx, ly] = toXY(angleDeg - halfW, r * 0.3);
+    const [tx, ty] = toXY(angleDeg, r);
+    const [rx, ry] = toXY(angleDeg + halfW, r * 0.3);
+
+    const poly = makeSVG('polygon', {
+      points: `${cx},${cy} ${lx},${ly} ${tx},${ty} ${rx},${ry}`,
+      fill: colors[i], opacity: 0.85
+    });
+    svg.appendChild(poly);
+  });
+
+  // direction labels
+  DIRS.forEach((label, i) => {
+    const angleDeg = i * 45 - 90;
+    const rad = angleDeg * Math.PI / 180;
+    const lx = cx + (maxR + 11) * Math.cos(rad);
+    const ly = cy + (maxR + 11) * Math.sin(rad);
+    const t = makeSVG('text', {
+      x: lx, y: ly, 'text-anchor':'middle', 'dominant-baseline':'middle',
+      'font-size':'9', 'font-weight':'700', fill:'#475569'
+    });
+    t.textContent = label;
+    svg.appendChild(t);
+  });
+}
+
+function makeSVG(tag, attrs) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k,v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+}
+
+// ═══════════════════════════════════════════════════════
+// MONTHLY BAR CHART
+// ═══════════════════════════════════════════════════════
+function drawBarChart(monthlyMph, hFactor) {
+  const chart = document.getElementById('monthly-chart');
+  chart.innerHTML = '';
+  const vals = monthlyMph.map(v => v * hFactor);
+  const maxV = Math.max(...vals, 1);
+
+  vals.forEach((v, i) => {
+    const wc = getWindClass(v);
+    const col = document.createElement('div');
+    col.className = 'bar-col';
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.height = `${(v/maxV)*65}px`;
+    bar.style.backgroundColor = wc.color;
+    bar.title = `${MONTHS[i]}: ${v.toFixed(1)} mph`;
+    const lbl = document.createElement('div');
+    lbl.className = 'bar-lbl';
+    lbl.textContent = MONTHS[i].slice(0,1);
+    col.appendChild(bar); col.appendChild(lbl);
+    chart.appendChild(col);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// WIND CLASS
+// ═══════════════════════════════════════════════════════
+function getWindClass(mph) {
+  return WIND_CLASSES.find(c => mph >= c.min && mph < c.max) || WIND_CLASSES.at(-1);
+}
+
+// ═══════════════════════════════════════════════════════
+// MAIN ANALYSIS
+// ═══════════════════════════════════════════════════════
+async function analyze() {
+  const addrVal  = document.getElementById('addr-input').value.trim();
+  if (!addrVal) { alert('Please enter an address or ZIP code.'); return; }
+
+  const loader = document.getElementById('loader');
+  loader.classList.add('show');
+
+  try {
+    // 1. Geocode
+    const { lat, lon, state } = await geocode(addrVal);
+
+    // 2. Fetch wind data
+    const windData = await fetchWindData(lat, lon);
+    const { speeds, directions, times } = windData;
+
+    // 3. Setup parameters
+    const turbineKey = document.getElementById('turbine-sel').value;
+    const turbine    = TURBINES[turbineKey];
+    const heightFt   = parseFloat(document.getElementById('height-input').value) || 20;
+    const monthlyBill= parseFloat(document.getElementById('bill-input').value)   || 150;
+    const anemVal    = parseFloat(document.getElementById('anem-input').value);
+    const hFactor    = heightFactor(heightFt);
+
+    // 4. Historical avg wind speed at 10m
+    const validSpeeds = speeds.filter(s => s != null);
+    const histAvg10m  = validSpeeds.reduce((a,b)=>a+b, 0) / validSpeeds.length;
+
+    // 5. Scale factor if anemometer reading provided
+    let scaleFactor = hFactor; // base: just height correction
+    if (!isNaN(anemVal) && anemVal > 0) {
+      // User measured their wind at some height; treat it as their actual site average
+      // Scale historical distribution so its mean matches user measurement
+      scaleFactor = anemVal / histAvg10m;
+    }
+
+    const avgAtHeight = histAvg10m * hFactor;
+    const effectiveAvg = isNaN(anemVal) || anemVal <= 0 ? avgAtHeight : anemVal;
+
+    // 6. Annual energy output (hourly simulation)
+    let annualKwh = 0;
+    for (const s of speeds) {
+      if (s == null) continue;
+      const adjSpeed = s * scaleFactor;
+      const powerW   = calcPower(adjSpeed, turbine);
+      annualKwh += powerW / 1000; // 1 hour per reading → kWh
+    }
+    // Normalize to exactly 8760 hours/year
+    const hoursCovered = validSpeeds.length;
+    annualKwh = (annualKwh / hoursCovered) * 8760;
+
+    // 7. Electricity rate
+    const rateCents = STATE_RATES[state] || 15.0; // fallback to national avg
+    const rateUsd   = rateCents / 100;
+
+    // 8. Savings
+    const annualSavings = annualKwh * rateUsd;
+    const monthlyUsage  = monthlyBill / rateUsd; // kWh/month user consumes
+    const annualUsage   = monthlyUsage * 12;
+    const pctOffset     = Math.min(100, (annualKwh / annualUsage) * 100);
+
+    // 9. Payback period
+    const turbineCostMid = (turbine.costLo + turbine.costHi) / 2;
+    const payback = annualSavings > 0 ? turbineCostMid / annualSavings : Infinity;
+
+    // 10. 20-year savings (3% rate increase per year)
+    let twentyYr = 0;
+    for (let y = 0; y < 20; y++) {
+      twentyYr += annualKwh * rateUsd * Math.pow(1.03, y);
+    }
+
+    // 11. CO2 avoided (US avg grid: 0.386 kg CO2/kWh)
+    const co2Tons = (annualKwh * 20 * 0.386) / 1000;
+
+    // 12. Monthly breakdown
+    const monthlyMph = buildMonthlyData(times, speeds);
+
+    // 13. Wind rose
+    const roseFreqs = buildWindRose(directions);
+
+    // ── Update UI ──────────────────────────────────────
+
+    // Map marker
+    const wc = getWindClass(effectiveAvg);
+    placeMarker(lat, lon, wc.color, effectiveAvg);
+
+    // Wind summary
+    document.getElementById('avg-wind-val').textContent = `${effectiveAvg.toFixed(1)} mph`;
+    const badge = document.getElementById('wind-class-badge');
+    badge.textContent = wc.label;
+    badge.style.background = wc.color + '22';
+    badge.style.color = wc.color;
+    badge.style.border = `1.5px solid ${wc.color}`;
+    badge.title = wc.tip;
+
+    drawBarChart(monthlyMph, scaleFactor);
+    drawWindRose(roseFreqs);
+
+    // Savings
+    document.getElementById('annual-savings').textContent = '$' + Math.round(annualSavings).toLocaleString();
+    document.getElementById('savings-note').textContent =
+      `${turbine.label} · ${state || '—'} rate: ${rateCents.toFixed(1)}¢/kWh`;
+
+    // Stats
+    document.getElementById('stat-kwh').textContent     = Math.round(annualKwh).toLocaleString();
+    document.getElementById('stat-rate').textContent    = rateCents.toFixed(1) + '¢';
+    document.getElementById('stat-pct').textContent     = Math.round(pctOffset) + '%';
+    document.getElementById('stat-payback').textContent = isFinite(payback) ? payback.toFixed(1) : '∞';
+    document.getElementById('stat-20yr').textContent    = '$' + Math.round(twentyYr).toLocaleString();
+    document.getElementById('stat-co2').textContent     = co2Tons.toFixed(1);
+
+    // Color the savings banner based on viability
+    const banner = document.querySelector('.savings-banner');
+    if (annualSavings < 50)       banner.style.background = 'linear-gradient(135deg,#dc2626,#b91c1c)';
+    else if (annualSavings < 200) banner.style.background = 'linear-gradient(135deg,#d97706,#b45309)';
+    else                          banner.style.background = 'linear-gradient(135deg,#16a34a,#15803d)';
+
+    // Show results
+    document.getElementById('placeholder').style.display = 'none';
+    document.getElementById('results').style.display = 'block';
+
+  } catch (err) {
+    alert('Error: ' + err.message);
+    console.error(err);
+  } finally {
+    loader.classList.remove('show');
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// EVENT LISTENERS
+// ═══════════════════════════════════════════════════════
+document.getElementById('analyze-btn').addEventListener('click', analyze);
+document.getElementById('addr-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') analyze();
+});
+
+// Allow clicking map to set location
+map.on('click', async (e) => {
+  const { lat, lng } = e.latlng;
+  document.getElementById('addr-input').value = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+  analyze();
+});
+</script>
+</body>
+</html>

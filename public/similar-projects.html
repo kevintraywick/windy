@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Similar Projects — Windy</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+  <style>
+    :root {
+      --sky:  #0f4c81;
+      --teal: #0d9488;
+    }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f4f8; }
+    .grad-header { background: linear-gradient(135deg, #0f4c81 0%, #1a6fad 60%, #0d9488 100%); }
+    .card { background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.15s, box-shadow 0.15s; }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+    .card-tag { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; }
+    .tag-individual { background: #e0f2fe; color: #0369a1; }
+    .tag-community  { background: #d1fae5; color: #065f46; }
+    .tag-org        { background: #ede9fe; color: #5b21b6; }
+    .tag-forum      { background: #fef3c7; color: #92400e; }
+    a.nav-link { color: white; opacity: 0.75; font-size: 0.85rem; text-decoration: none; padding: 4px 10px; border-radius: 6px; transition: opacity 0.15s, background 0.15s; }
+    a.nav-link:hover { opacity: 1; background: rgba(255,255,255,0.15); }
+    a.nav-link.active { opacity: 1; background: rgba(255,255,255,0.2); font-weight: 600; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Header -->
+  <header class="grad-header text-white px-6 py-3">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center justify-between mb-2">
+        <div>
+          <h1 class="text-xl font-bold tracking-tight">🌬️ Windy</h1>
+          <p class="text-xs" style="opacity:0.75">Is wind power right for your home?</p>
+        </div>
+        <nav class="flex gap-1">
+          <a href="/" class="nav-link">Wind Tool</a>
+          <a href="/similar-projects.html" class="nav-link active">Similar Projects</a>
+          <a href="/references.html" class="nav-link">References</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page intro -->
+  <div class="max-w-6xl mx-auto px-6 pt-10 pb-4">
+    <h2 class="text-3xl font-extrabold text-gray-800 mb-2">Similar Projects</h2>
+    <p class="text-gray-500 text-base max-w-2xl leading-relaxed">
+      Serious people and communities around the world building, teaching, and documenting small wind power —
+      from a teenager in rural Malawi to off-grid engineers in the Colorado mountains to workshop organizers
+      running courses across Europe. These are the shoulders Windy stands on.
+    </p>
+  </div>
+
+  <!-- Section: Individuals -->
+  <div class="max-w-6xl mx-auto px-6 pt-6 pb-2">
+    <h3 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">Individuals</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+      <!-- Hugh Piggott -->
+      <div class="card">
+        <div class="p-5 flex flex-col gap-3 flex-1">
+          <div class="flex items-start justify-between gap-2">
+            <div class="text-4xl">🏴󠁧󠁢󠁳󠁣󠁴󠁿</div>
+            <span class="card-tag tag-individual">Individual</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800 text-lg leading-tight">Hugh Piggott</h4>
+            <p class="text-xs text-gray-400 mt-0.5">Scoraig Peninsula, NW Scotland · since 1970s</p>
+          </div>
+          <p class="text-sm text-gray-600 leading-relaxed flex-1">
+            The godfather of homebrew wind power. Lives off-grid on a remote Scottish peninsula with no
+            grid connection. Designed the globally-adopted <strong>Piggott axial-flux turbine</strong> — a
+            hand-wound generator built from car parts, neodymium magnets, and carved wooden blades.
+            His <em>Wind Turbine Recipe Book</em> has been translated into 10+ languages and sparked
+            hundreds of community builds worldwide. Teaches hands-on courses at Scoraig and around the world.
+          </p>
+          <div class="flex gap-2 flex-wrap mt-auto pt-2">
+            <a href="https://scoraigwind.co.uk" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">scoraigwind.co.uk →</a>
+            <a href="https://windempowerment.org/research-and-devlopment/small-wind-systems/the-piggott-turbine/" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">The Piggott Turbine →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- William Kamkwamba -->
+      <div class="card">
+        <div class="p-5 flex flex-col gap-3 flex-1">
+          <div class="flex items-start justify-between gap-2">
+            <div class="text-4xl">🇲🇼</div>
+            <span class="card-tag tag-individual">Individual</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800 text-lg leading-tight">William Kamkwamba</h4>
+            <p class="text-xs text-gray-400 mt-0.5">Wimbe, Malawi · built first turbine age 14, 2001</p>
+          </div>
+          <p class="text-sm text-gray-600 leading-relaxed flex-1">
+            During a famine that forced him out of school, William built a functioning wind turbine from
+            bicycle parts, tractor fan blades, and scrap metal — using a book he found in a library. It
+            powered his family's home and eventually a water pump. His story became a global phenomenon
+            through the bestselling memoir and 2019 Netflix film <em>The Boy Who Harnessed the Wind</em>.
+            Now an engineer, he founded the <strong>Moving Windmills Project</strong> to support rural
+            communities in Malawi.
+          </p>
+          <div class="flex gap-2 flex-wrap mt-auto pt-2">
+            <a href="https://williamkamkwamba.com" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">williamkamkwamba.com →</a>
+            <a href="https://www.ted.com/talks/william_kamkwamba_how_i_harnessed_the_wind" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">TED Talk →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dan Bartmann & Dan Fink -->
+      <div class="card">
+        <div class="p-5 flex flex-col gap-3 flex-1">
+          <div class="flex items-start justify-between gap-2">
+            <div class="text-4xl">🏔️</div>
+            <span class="card-tag tag-individual">Individual</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800 text-lg leading-tight">Dan Bartmann &amp; Dan Fink</h4>
+            <p class="text-xs text-gray-400 mt-0.5">Northern Colorado mountains, USA · off-grid since 1991</p>
+          </div>
+          <p class="text-sm text-gray-600 leading-relaxed flex-1">
+            Two engineers living off the grid in the Colorado Rockies — 11 miles from the nearest power pole.
+            They built their lives around homebrewed wind and solar power, documented everything, and wrote
+            the definitive English-language guide: <strong><em>Homebrew Wind Power</em></strong> (2009). Their
+            website <strong>Otherpower.com</strong> is the most comprehensive technical resource for DIY
+            axial-flux turbine builders, with detailed guides on winding coils, pouring resin, and carving blades.
+          </p>
+          <div class="flex gap-2 flex-wrap mt-auto pt-2">
+            <a href="https://www.otherpower.com" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">otherpower.com →</a>
+            <a href="https://www.fieldlines.com" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">fieldlines.com forum →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Jonathan Schreiber / PureSelfMade -->
+      <div class="card">
+        <div class="p-5 flex flex-col gap-3 flex-1">
+          <div class="flex items-start justify-between gap-2">
+            <div class="text-4xl">🇦🇹</div>
+            <span class="card-tag tag-individual">Individual</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800 text-lg leading-tight">Jonathan Schreiber / PureSelfMade</h4>
+            <p class="text-xs text-gray-400 mt-0.5">Austria · workshops across Europe &amp; South America · since 2013</p>
+          </div>
+          <p class="text-sm text-gray-600 leading-relaxed flex-1">
+            Austrian engineer turned nonprofit workshop leader. Since 2013, Jonathan has run 3–5 day hands-on
+            courses where participants build complete Piggott-style turbines from scratch — generator, rotor
+            blades, metalwork, and electrics. Over <strong>900 participants, 80+ turbines built</strong>
+            across Poland, France, Germany, Austria, Chile, and beyond. In 2024 alone he ran ~12 workshops.
+            Courses are open to anyone; no prior engineering experience needed.
+          </p>
+          <div class="flex gap-2 flex-wrap mt-auto pt-2">
+            <a href="https://pureselfmade.com" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">pureselfmade.com →</a>
+            <a href="https://pureselfmade.com/wind-turbine-workshops/" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">Workshops →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Marcin Jakubowski / Open Source Ecology -->
+      <div class="card">
+        <div class="p-5 flex flex-col gap-3 flex-1">
+          <div class="flex items-start justify-between gap-2">
+            <div class="text-4xl">🌐</div>
+            <span class="card-tag tag-org">Organization</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800 text-lg leading-tight">Open Source Ecology</h4>
+            <p class="text-xs text-gray-400 mt-0.5">Kansas, USA (global) · founded 2003 · Marcin Jakubowski</p>
+          </div>
+          <p class="text-sm text-gray-600 leading-relaxed flex-1">
+            Marcin Jakubowski's global network of engineers designing a free, open-source
+            <strong>Global Village Construction Set</strong> — 50 industrial machines (including wind turbines,
+            tractors, 3D printers) that any community can build themselves at a fraction of commercial cost.
+            All designs are published freely. Their open-source wind turbine documentation covers vertical-axis
+            designs buildable from stove pipe, metal brackets, and a trailer hub. A TED Talk that reached
+            millions.
+          </p>
+          <div class="flex gap-2 flex-wrap mt-auto pt-2">
+            <a href="https://www.opensourceecology.org" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">opensourceecology.org →</a>
+            <a href="https://wiki.opensourceecology.org/wiki/Wind_Turbine" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">Wind Turbine wiki →</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Section: Organizations -->
+  <div class="max-w-6xl mx-auto px-6 pt-8 pb-2">
+    <h3 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">Organizations &amp; Communities</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+      <!-- Wind Empowerment -->
+      <div class="card">
+        <div class="p-5 flex flex-col gap-3 flex-1">
+          <div class="flex items-start justify-between gap-2">
+            <div class="text-4xl">🌍</div>
+            <span class="card-tag tag-org">Organization</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800 text-lg leading-tight">Wind Empowerment</h4>
+            <p class="text-xs text-gray-400 mt-0.5">Global · 1,000+ members · 50+ countries</p>
+          </div>
+          <p class="text-sm text-gray-600 leading-relaxed flex-1">
+            A global association promoting locally-manufactured small wind turbines for rural electrification
+            and sustainability. Rooted in the Piggott open-source design, member organizations have built
+            turbines in Nepal, Argentina, India, Peru, Tanzania, Ethiopia, and dozens more countries.
+            Represents wind turbine manufacturers, NGOs, universities, cooperatives, and individual practitioners.
+            Maintains an open knowledge base and coordinates international collaboration on small wind.
+          </p>
+          <div class="flex gap-2 flex-wrap mt-auto pt-2">
+            <a href="https://windempowerment.org" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">windempowerment.org →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Distributed Wind Energy Association -->
+      <div class="card">
+        <div class="p-5 flex flex-col gap-3 flex-1">
+          <div class="flex items-start justify-between gap-2">
+            <div class="text-4xl">🇺🇸</div>
+            <span class="card-tag tag-org">Organization</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800 text-lg leading-tight">Distributed Wind Energy Association</h4>
+            <p class="text-xs text-gray-400 mt-0.5">USA · small &amp; distributed wind advocacy</p>
+          </div>
+          <p class="text-sm text-gray-600 leading-relaxed flex-1">
+            The US trade and advocacy association specifically for small and distributed wind — turbines
+            installed where people live and work, not utility-scale wind farms. The DWEA works with state
+            and federal policymakers on permitting, net metering, tax incentives, and interconnection rules
+            that directly affect homeowners considering wind. Publishes annual market reports and educational
+            resources on the state of residential wind power in the US.
+          </p>
+          <div class="flex gap-2 flex-wrap mt-auto pt-2">
+            <a href="https://distributedwind.org" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">distributedwind.org →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Otherpower / Fieldlines Forum -->
+      <div class="card">
+        <div class="p-5 flex flex-col gap-3 flex-1">
+          <div class="flex items-start justify-between gap-2">
+            <div class="text-4xl">💬</div>
+            <span class="card-tag tag-forum">Forum</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800 text-lg leading-tight">Fieldlines.com</h4>
+            <p class="text-xs text-gray-400 mt-0.5">Online community · The Otherpower discussion board</p>
+          </div>
+          <p class="text-sm text-gray-600 leading-relaxed flex-1">
+            The most technically serious online community for DIY wind power builders. Thousands of threads
+            covering axial-flux generator winding, blade carving, tower design, charge controllers, battery
+            banks, and full off-grid system design. Run by and for people who are actually building — not
+            just planning. Long-running threads document multi-year build projects in extraordinary detail.
+            Companion to Otherpower.com's reference documentation.
+          </p>
+          <div class="flex gap-2 flex-wrap mt-auto pt-2">
+            <a href="https://www.fieldlines.com" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">fieldlines.com →</a>
+            <a href="https://www.otherpower.com/otherpower_wind.html" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">Otherpower Wind →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mother Earth News -->
+      <div class="card">
+        <div class="p-5 flex flex-col gap-3 flex-1">
+          <div class="flex items-start justify-between gap-2">
+            <div class="text-4xl">🌿</div>
+            <span class="card-tag tag-community">Community</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800 text-lg leading-tight">Mother Earth News</h4>
+            <p class="text-xs text-gray-400 mt-0.5">USA · since 1970 · homesteading &amp; DIY self-sufficiency</p>
+          </div>
+          <p class="text-sm text-gray-600 leading-relaxed flex-1">
+            The original homesteading publication, covering DIY wind power since the 1970s energy crisis.
+            Their archive of wind turbine build guides, alternator conversions, and small-scale energy
+            projects represents 50+ years of reader-contributed practical knowledge. The car alternator
+            wind generator article is one of the web's most-replicated DIY wind guides. A cornerstone
+            resource for Americans who want to reduce utility dependence through self-built systems.
+          </p>
+          <div class="flex gap-2 flex-wrap mt-auto pt-2">
+            <a href="https://www.motherearthnews.com/sustainable-living/renewable-energy/diy-wind-turbine-zm0z17amz/" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">DIY Wind Turbine Guide →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Instructables Wind Community -->
+      <div class="card">
+        <div class="p-5 flex flex-col gap-3 flex-1">
+          <div class="flex items-start justify-between gap-2">
+            <div class="text-4xl">🔧</div>
+            <span class="card-tag tag-forum">Community</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800 text-lg leading-tight">Instructables Wind Projects</h4>
+            <p class="text-xs text-gray-400 mt-0.5">Online · 100s of documented builds worldwide</p>
+          </div>
+          <p class="text-sm text-gray-600 leading-relaxed flex-1">
+            The world's largest maker community hosts hundreds of step-by-step DIY wind turbine build guides,
+            from simple hobby turbines to serious 1 kW+ axial-flux systems. Projects are richly documented
+            with photos, materials lists, and builder commentary — and comment threads often contain years of
+            follow-up from the original builder. A great starting point for understanding what amateur
+            builders have actually achieved with modest budgets and hand tools.
+          </p>
+          <div class="flex gap-2 flex-wrap mt-auto pt-2">
+            <a href="https://www.instructables.com/How-I-built-an-electricity-producing-wind-turbine/" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">Popular Build →</a>
+            <a href="https://www.instructables.com/DIY-1000-watt-wind-turbine/" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">1 kW Build →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reasons to be Cheerful / DIY Diehards -->
+      <div class="card">
+        <div class="p-5 flex flex-col gap-3 flex-1">
+          <div class="flex items-start justify-between gap-2">
+            <div class="text-4xl">📰</div>
+            <span class="card-tag tag-community">Media</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-800 text-lg leading-tight">"The DIY Diehards"</h4>
+            <p class="text-xs text-gray-400 mt-0.5">Reasons to be Cheerful · global roundup</p>
+          </div>
+          <p class="text-sm text-gray-600 leading-relaxed flex-1">
+            A well-researched 2023 long-read profiling the worldwide network of individuals and groups building
+            renewable energy infrastructure from scratch — with a focus on the Piggott turbine community and
+            PureSelfMade's workshop model. Connects the dots between Piggott's original Scottish off-grid
+            experiment and the hundreds of turbines now spinning from Chile to Nepal. An excellent overview
+            of how open-source knowledge has multiplied into a genuine global movement.
+          </p>
+          <div class="flex gap-2 flex-wrap mt-auto pt-2">
+            <a href="https://reasonstobecheerful.world/diy-diehards-building-renewable-energy-infrastructure-from-scratch/" target="_blank" rel="noreferrer"
+               class="text-xs font-semibold text-teal-700 hover:text-teal-600 underline">Read the article →</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer note -->
+  <div class="max-w-6xl mx-auto px-6 py-10 text-sm text-gray-400">
+    Know of a project that should be here? <a href="mailto:kevintraywick@gmail.com" class="text-teal-600 hover:underline">Get in touch →</a>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>References — Windy</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+  <style>
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f4f8; }
+    .grad-header { background: linear-gradient(135deg, #0f4c81 0%, #1a6fad 60%, #0d9488 100%); }
+    a.nav-link { color: white; opacity: 0.75; font-size: 0.85rem; text-decoration: none; padding: 4px 10px; border-radius: 6px; transition: opacity 0.15s, background 0.15s; }
+    a.nav-link:hover { opacity: 1; background: rgba(255,255,255,0.15); }
+    a.nav-link.active { opacity: 1; background: rgba(255,255,255,0.2); font-weight: 600; }
+    .section-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+    .ref-item { display: flex; flex-direction: column; gap: 2px; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+    .ref-item:last-child { border-bottom: none; }
+    .ref-title { font-weight: 600; color: #1e293b; font-size: 0.9rem; }
+    .ref-title a { color: #0d9488; text-decoration: none; }
+    .ref-title a:hover { text-decoration: underline; }
+    .ref-meta { font-size: 0.75rem; color: #94a3b8; }
+    .ref-desc { font-size: 0.82rem; color: #64748b; line-height: 1.55; margin-top: 2px; }
+    .section-label { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Header -->
+  <header class="grad-header text-white px-6 py-3">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center justify-between mb-2">
+        <div>
+          <h1 class="text-xl font-bold tracking-tight">🌬️ Windy</h1>
+          <p class="text-xs" style="opacity:0.75">Is wind power right for your home?</p>
+        </div>
+        <nav class="flex gap-1">
+          <a href="/" class="nav-link">Wind Tool</a>
+          <a href="/similar-projects.html" class="nav-link">Similar Projects</a>
+          <a href="/references.html" class="nav-link active">References</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page intro -->
+  <div class="max-w-4xl mx-auto px-6 pt-10 pb-4">
+    <h2 class="text-3xl font-extrabold text-gray-800 mb-2">References</h2>
+    <p class="text-gray-500 text-base max-w-xl leading-relaxed">
+      Books, websites, data sources, and tools behind the Windy project. Links open in a new tab.
+    </p>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-6 pb-16 flex flex-col gap-6">
+
+    <!-- Physics & Engineering -->
+    <div class="section-card">
+      <p class="section-label" style="color:#0f4c81">⚙️ Physics &amp; Engineering</p>
+      <p class="text-xs text-gray-400 mb-4">The science behind wind power calculations and turbine design.</p>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://windexchange.energy.gov/small-wind-guidebook" target="_blank" rel="noreferrer">Small Wind Guidebook</a>
+        </div>
+        <div class="ref-meta">U.S. Department of Energy, WindExchange</div>
+        <div class="ref-desc">Comprehensive guide for homeowners on evaluating, installing, and maintaining small wind systems. Covers site assessment, economics, permitting, and grid interconnection. The authoritative US government reference for residential wind.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://docs.nrel.gov/docs/fy07osti/42005.pdf" target="_blank" rel="noreferrer">Small Wind Electric Systems: A U.S. Consumer's Guide</a>
+        </div>
+        <div class="ref-meta">NREL / U.S. Department of Energy · PDF</div>
+        <div class="ref-desc">Accessible, homeowner-focused guide covering how small wind works, what to expect in terms of output and cost, and how to evaluate whether your site is suitable. Published by NREL, free download.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://docs.nrel.gov/docs/fy15osti/63696.pdf" target="_blank" rel="noreferrer">Small Wind Site Assessment Guidelines</a>
+        </div>
+        <div class="ref-meta">NREL, 2014 · PDF</div>
+        <div class="ref-desc">Technical guidelines for assessing wind resources at specific sites, including measurement methodology, data analysis, and interpretation. Relevant for anyone considering an anemometer study before committing to a turbine installation.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://www.nrel.gov/wind/small-wind.html" target="_blank" rel="noreferrer">NREL Small Wind Research</a>
+        </div>
+        <div class="ref-meta">National Renewable Energy Laboratory</div>
+        <div class="ref-desc">NREL's small wind program hub, including testing data, turbine certification information, and links to the National Wind Technology Center. The best source for verified performance data on certified small turbines.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">Wind Power Physics: The Betz Limit &amp; Power Curve</div>
+        <div class="ref-meta">Core physics used in this tool</div>
+        <div class="ref-desc">
+          Wind power follows P = ½ρAC<sub>p</sub>v³, where ρ is air density (1.225 kg/m³ at sea level), A is rotor swept area, C<sub>p</sub> is the power coefficient (capped at 16/27 ≈ 0.593 by the Betz limit), and v is wind speed in m/s. Height correction uses the ¹⁄₇ power law: v(h) = v₁₀ × (h/10)^0.143.
+          Power scales with the <em>cube</em> of wind speed — doubling the wind means 8× the power.
+        </div>
+      </div>
+    </div>
+
+    <!-- DIY Books & Guides -->
+    <div class="section-card">
+      <p class="section-label" style="color:#059669">📚 Books &amp; DIY Guides</p>
+      <p class="text-xs text-gray-400 mb-4">The essential reading list for serious homebrewers.</p>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://www.amazon.com/Homebrew-Wind-Power-Dan-Bartmann/dp/0981920101" target="_blank" rel="noreferrer">Homebrew Wind Power</a>
+        </div>
+        <div class="ref-meta">Dan Bartmann &amp; Dan Fink · Buckville Publications, 2009 · ISBN 978-0981920108</div>
+        <div class="ref-desc">The definitive English-language guide to building your own axial-flux wind turbine. Covers wind theory, generator design, blade carving, wiring, and off-grid system integration. Written by two engineers who actually live this way. Available at most libraries.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://scoraigwind.co.uk/a-wind-turbine-recipe-book/" target="_blank" rel="noreferrer">A Wind Turbine Recipe Book</a>
+        </div>
+        <div class="ref-meta">Hugh Piggott · Scoraig Wind · 2008, updated editions · Free PDF available</div>
+        <div class="ref-desc">The open-source manual that sparked a global movement. Covers 6 sizes of axial-flux wind turbines buildable with simple hand tools and mostly locally-sourced materials. Translated into 10+ languages; used by community builders from Nepal to Chile to Poland.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://www.amazon.com/Wind-Power-Workshop-Building-Turbine/dp/190217562X" target="_blank" rel="noreferrer">Wind Power Workshop: Building Your Own Wind Turbine</a>
+        </div>
+        <div class="ref-meta">Hugh Piggott · Centre for Alternative Technology, 1997</div>
+        <div class="ref-desc">Piggott's earlier, more concise manual — still widely used and recommended. A good companion to the Recipe Book for hands-on workshop situations.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://williamkamkwamba.com" target="_blank" rel="noreferrer">The Boy Who Harnessed the Wind</a>
+        </div>
+        <div class="ref-meta">William Kamkwamba &amp; Bryan Mealer · William Morrow, 2009 · ISBN 978-0061730337</div>
+        <div class="ref-desc">The memoir of William Kamkwamba, who at 14 built a wind turbine from scrap in rural Malawi to power his family during a famine. Not a technical manual, but one of the most compelling arguments for why small wind power matters. Also a 2019 Netflix film.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://pureselfmade.com/wind-turbine-diy-book/" target="_blank" rel="noreferrer">The Piggott Ferrite Designs — DIY Book</a>
+        </div>
+        <div class="ref-meta">PureSelfMade / Jonathan Schreiber</div>
+        <div class="ref-desc">Updated guide covering the newer ferrite magnet variant of the Piggott turbine, with improved documentation for modern builds. Practical companion to Piggott's Recipe Book.</div>
+      </div>
+    </div>
+
+    <!-- Data APIs Used in This Tool -->
+    <div class="section-card">
+      <p class="section-label" style="color:#0d9488">🔌 Data Sources Used in This Tool</p>
+      <p class="text-xs text-gray-400 mb-4">APIs and datasets that power the Windy wind calculator.</p>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://open-meteo.com/en/docs/historical-weather-api" target="_blank" rel="noreferrer">Open-Meteo Historical Weather API</a>
+        </div>
+        <div class="ref-meta">Open-Meteo · Free, no API key · ERA5 reanalysis data</div>
+        <div class="ref-desc">Windy's primary wind data source. Returns hourly wind speed and direction at 10 m height for any location on Earth going back to 1940, based on ECMWF's ERA5 reanalysis dataset. Free for non-commercial use, ~0.25° spatial resolution (~25 km). This tool caches responses in PostgreSQL to minimize API calls.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://nominatim.openstreetmap.org/ui/about.html" target="_blank" rel="noreferrer">Nominatim Geocoding API</a>
+        </div>
+        <div class="ref-meta">OpenStreetMap Foundation · Free, no API key</div>
+        <div class="ref-desc">Converts street addresses and ZIP codes into latitude/longitude coordinates and returns structured address data including US state codes. Used by Windy to convert user-entered addresses into coordinates for wind data lookup.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://www.eia.gov/electricity/data/state/" target="_blank" rel="noreferrer">EIA State Electricity Profiles</a>
+        </div>
+        <div class="ref-meta">U.S. Energy Information Administration · Updated annually</div>
+        <div class="ref-desc">Source for the state-average residential electricity rates (cents/kWh) embedded in this tool. Windy currently uses 2024 EIA state averages. Full data available for download; a future version will call the EIA API for live rates.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://developer.nrel.gov/docs/wind/wind-toolkit/" target="_blank" rel="noreferrer">NREL Wind Integration National Dataset (WIND) Toolkit</a>
+        </div>
+        <div class="ref-meta">National Renewable Energy Laboratory · Free API key required</div>
+        <div class="ref-desc">Higher-resolution historical wind data for the continental US (2 km resolution, 5-minute intervals). Not yet integrated into Windy but planned as an optional high-accuracy mode for US locations. Requires a free API key from developer.nrel.gov.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://windexchange.energy.gov/maps-data/319" target="_blank" rel="noreferrer">DOE Wind Resource Maps</a>
+        </div>
+        <div class="ref-meta">U.S. Department of Energy · WindExchange</div>
+        <div class="ref-desc">National and state-level maps showing average annual wind speed at various heights. Useful for a quick visual check on whether your region has meaningful wind resources before doing a detailed analysis.</div>
+      </div>
+    </div>
+
+    <!-- Online Communities -->
+    <div class="section-card">
+      <p class="section-label" style="color:#7c3aed">💬 Online Communities &amp; Forums</p>
+      <p class="text-xs text-gray-400 mb-4">Where serious DIY wind builders share knowledge and ask questions.</p>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://www.otherpower.com/otherpower_wind.html" target="_blank" rel="noreferrer">Otherpower.com — Wind Power</a>
+        </div>
+        <div class="ref-meta">Dan Bartmann &amp; Dan Fink · Colorado, USA</div>
+        <div class="ref-desc">The web's best technical reference for homebrewed wind power. Extensive documentation on building axial-flux alternators, carving blades, winding coils, and setting up off-grid systems. Real, detailed, and based on years of actual experience.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://www.fieldlines.com" target="_blank" rel="noreferrer">Fieldlines.com</a>
+        </div>
+        <div class="ref-meta">The Otherpower Discussion Board</div>
+        <div class="ref-desc">The companion forum to Otherpower.com. Active community of serious DIY wind and solar builders. Deep technical threads covering every aspect of small-scale power generation, storage, and off-grid living.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://diysolarforum.com/forums/diy-wind-turbines-and-hydroelectric.46/" target="_blank" rel="noreferrer">DIY Solar Power Forum — Wind &amp; Hydro Section</a>
+        </div>
+        <div class="ref-meta">diysolarforum.com</div>
+        <div class="ref-desc">Active forum covering small wind turbines alongside solar and off-grid topics. Good for troubleshooting charge controllers, inverters, and hybrid wind-solar systems.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://pureselfmade.com" target="_blank" rel="noreferrer">PureSelfMade Blog &amp; Workshop Reports</a>
+        </div>
+        <div class="ref-meta">Jonathan Schreiber · Austria</div>
+        <div class="ref-desc">Detailed workshop reports, project walkthroughs, and DIY guides from one of the most active Piggott turbine workshop organizers in the world. Each report documents a real build from start to finish with photos and technical notes.</div>
+      </div>
+    </div>
+
+    <!-- Policy & Regulatory -->
+    <div class="section-card">
+      <p class="section-label" style="color:#b45309">📋 Policy, Incentives &amp; Certification</p>
+      <p class="text-xs text-gray-400 mb-4">Rules, regulations, and financial incentives that affect homeowner wind projects.</p>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://distributedwind.org" target="_blank" rel="noreferrer">Distributed Wind Energy Association (DWEA)</a>
+        </div>
+        <div class="ref-meta">US trade association for small wind · Washington, DC</div>
+        <div class="ref-desc">Advocacy and education for distributed (small) wind power in the US. Tracks state-by-state policy on net metering, permitting, and incentives. Essential resource for understanding the regulatory landscape for a home wind project.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://www.dsireusa.org" target="_blank" rel="noreferrer">DSIRE — Database of State Incentives for Renewables &amp; Efficiency</a>
+        </div>
+        <div class="ref-meta">NC State University / U.S. Department of Energy</div>
+        <div class="ref-desc">The most comprehensive source for state and federal incentive programs for renewable energy, including small wind. Search by state and technology to find tax credits, rebates, net metering policies, and loan programs that apply to your project.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://smallwindcertification.org" target="_blank" rel="noreferrer">Small Wind Certification Council (SWCC)</a>
+        </div>
+        <div class="ref-meta">Independent certification body for small wind turbines</div>
+        <div class="ref-desc">Provides independent, accredited certification of small wind turbines based on AWEA performance and safety standards. Certified turbines are eligible for federal tax credits. If you're buying a commercial turbine (vs. building one), check SWCC certification first.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://windexchange.energy.gov/small-wind-guidebook#permits" target="_blank" rel="noreferrer">Permits, Covenants, and Zoning for Small Wind</a>
+        </div>
+        <div class="ref-meta">DOE WindExchange / Small Wind Guidebook</div>
+        <div class="ref-desc">Overview of the local permitting landscape for small wind turbines — including typical setback requirements, height restrictions, HOA considerations, and noise ordinances. A critical first step before investing in a turbine.</div>
+      </div>
+    </div>
+
+    <!-- News & Media -->
+    <div class="section-card">
+      <p class="section-label" style="color:#dc2626">📰 Articles &amp; Media</p>
+      <p class="text-xs text-gray-400 mb-4">Journalism, features, and talks worth reading or watching.</p>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://reasonstobecheerful.world/diy-diehards-building-renewable-energy-infrastructure-from-scratch/" target="_blank" rel="noreferrer">The DIY Diehards Building Green Infrastructure from Scratch</a>
+        </div>
+        <div class="ref-meta">Reasons to be Cheerful · 2023</div>
+        <div class="ref-desc">Long-read profiling the worldwide community of individuals building renewable energy infrastructure with their hands — centered on PureSelfMade's workshop model and the Piggott turbine network. One of the best overviews of the movement.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://www.ted.com/talks/william_kamkwamba_how_i_harnessed_the_wind" target="_blank" rel="noreferrer">How I Harnessed the Wind — TED Talk</a>
+        </div>
+        <div class="ref-meta">William Kamkwamba · TED Global 2009</div>
+        <div class="ref-desc">William Kamkwamba's 4-minute TED talk describing how he built a wind turbine from library books and junkyard parts in rural Malawi. One of the most-viewed talks on self-sufficiency and DIY energy.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://greennetwork.asia/public/news/how-an-open-source-wind-turbine-model-enables-rural-electrification-movements-worldwide/" target="_blank" rel="noreferrer">How an Open-Source Wind Turbine Model Enables Rural Electrification Worldwide</a>
+        </div>
+        <div class="ref-meta">Green Network Asia</div>
+        <div class="ref-desc">Overview of how Hugh Piggott's open-source turbine design has spread across the developing world, enabling communities to build and maintain their own wind power systems without relying on expensive imported equipment.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://makezine.com/projects/backyard-wind-power/" target="_blank" rel="noreferrer">Backyard Wind Power</a>
+        </div>
+        <div class="ref-meta">Make: Magazine</div>
+        <div class="ref-desc">Make:'s introduction to building small wind turbines from common materials. A good starting point for makers curious about wind power but new to the topic.</div>
+      </div>
+
+      <div class="ref-item">
+        <div class="ref-title">
+          <a href="https://www.motherearthnews.com/sustainable-living/renewable-energy/diy-wind-turbine-zm0z17amz/" target="_blank" rel="noreferrer">Build a Wind Generator with a Car Alternator</a>
+        </div>
+        <div class="ref-meta">Mother Earth News</div>
+        <div class="ref-desc">One of the web's most-replicated DIY wind power guides. Turns a salvaged car alternator into a functional wind generator using materials from the hardware store and salvage yard. Practical, approachable, and widely tested by readers.</div>
+      </div>
+    </div>
+
+    <!-- About this tool -->
+    <div class="section-card" style="background:#f8fafc;">
+      <p class="section-label" style="color:#64748b">ℹ️ About This Tool</p>
+      <p class="text-sm text-gray-500 leading-relaxed">
+        Windy is an open-source homeowner tool built by <a href="https://kevintraywick.com" class="text-teal-600 hover:underline">Kevin Traywick</a>.
+        Wind data is sourced from the <a href="https://open-meteo.com" class="text-teal-600 hover:underline">Open-Meteo</a> historical API (ERA5 reanalysis).
+        Electricity rates from the <a href="https://www.eia.gov/electricity/data/state/" class="text-teal-600 hover:underline">U.S. Energy Information Administration</a> (2024 state averages).
+        Geocoding by <a href="https://nominatim.openstreetmap.org" class="text-teal-600 hover:underline">Nominatim / OpenStreetMap</a>.
+        Map tiles by <a href="https://www.openstreetmap.org" class="text-teal-600 hover:underline">OpenStreetMap</a> contributors, rendered via Leaflet.js.
+        Built with React, Tailwind CSS, Node.js, and PostgreSQL. Deployed on Railway.
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>
