@@ -26,6 +26,9 @@ export default function Map({ location, results, onMapClick }) {
       maxZoom: 19,
     }).addTo(mapRef.current)
 
+    // Force Leaflet to re-measure container after flex layout settles
+    setTimeout(() => mapRef.current?.invalidateSize(), 0)
+
     mapRef.current.on('click', (e) => {
       const { lat, lng } = e.latlng
       onMapClick(`${lat.toFixed(4)}, ${lng.toFixed(4)}`)
@@ -59,7 +62,7 @@ export default function Map({ location, results, onMapClick }) {
   return (
     <div
       ref={containerRef}
-      className="flex-1 min-w-0"
+      className="flex-1 min-w-0 h-full"
       style={{ cursor: 'crosshair' }}
     />
   )
