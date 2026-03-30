@@ -8,7 +8,7 @@ Project context for AI-assisted development sessions.
 
 Users enter their address (or click the map), and the tool fetches a year of historical wind data for their exact location, runs a physics-based power simulation using their chosen turbine size, and shows annual savings, payback period, and a 20-year ROI estimate. An optional anemometer input lets users validate estimates against a real measurement.
 
-Live at: `kevintraywick.com/windy`
+Live at: `https://meticulous-eagerness-production-411f.up.railway.app`
 
 ## Tech stack
 

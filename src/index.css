@@ -1,9 +1,9 @@
+/* Leaflet base styles — @import must come before Tailwind directives */
+@import 'leaflet/dist/leaflet.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Leaflet base styles */
-@import 'leaflet/dist/leaflet.css';
 
 /* Ensure map fills its container */
 .leaflet-container {
