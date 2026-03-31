@@ -12,6 +12,8 @@ const DEFAULT_CONFIG = {
   anemMph: '',
 }
 
+const isZipCode = (q) => /^\d{5}(-\d{4})?$/.test(q.trim())
+
 export default function App() {
   const [address, setAddress]   = useState('')
   const [location, setLocation] = useState(null)   // { lat, lon, state, displayName }
@@ -19,6 +21,8 @@ export default function App() {
   const [config, setConfig]     = useState(DEFAULT_CONFIG)
   const [loading, setLoading]   = useState(false)
   const [error, setError]       = useState(null)
+  // Phase: null → 'zip' (ZIP entered, prompt for address) → 'address' (full address entered, show satellite)
+  const [phase, setPhase]       = useState(null)
 
   const analyze = useCallback(async (queryOverride) => {
     const query = queryOverride ?? address
@@ -42,12 +46,20 @@ export default function App() {
       }, loc.state)
 
       setResults(res)
+
+      // Determine phase: ZIP lookup → prompt for address; address lookup → show satellite
+      if (isZipCode(query)) {
+        setPhase('zip')
+        setAddress('')   // clear so placeholder shows
+      } else if (phase === 'zip' || phase === null) {
+        setPhase('address')
+      }
     } catch (err) {
       setError(err.message)
     } finally {
       setLoading(false)
     }
-  }, [address, config])
+  }, [address, config, phase])
 
   const handleMapClick = useCallback((latLonStr) => {
     setAddress(latLonStr)
@@ -82,7 +94,11 @@ export default function App() {
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && analyze()}
-            placeholder="Enter your address or ZIP code…"
+            placeholder={
+              phase === 'zip'
+                ? 'Enter your residential address to simulate wind across your property…'
+                : 'Enter your address or ZIP code…'
+            }
             className="flex-1 px-4 py-2.5 rounded-lg text-sm text-slate-800 shadow-md outline-none focus:ring-2 focus:ring-teal-400"
           />
           <button
@@ -104,6 +120,7 @@ export default function App() {
           location={location}
           results={results}
           onMapClick={handleMapClick}
+          phase={phase}
         />
         <SetupPanel
           config={config}
