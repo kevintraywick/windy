@@ -12,8 +12,9 @@ app.use(cors())
 app.use(express.json())
 
 // ── API routes ────────────────────────────────────────────────────────────────
-app.use('/api/health', require('./routes/health'))
-app.use('/api/wind',   require('./routes/wind'))
+app.use('/api/health',   require('./routes/health'))
+app.use('/api/wind',     require('./routes/wind'))
+app.use('/api/roadmap',  require('./routes/roadmap'))
 
 // ── Static files (production) ─────────────────────────────────────────────────
 // In dev, Vite serves the frontend. In prod, Express serves the built dist/.
