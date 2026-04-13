@@ -244,6 +244,68 @@ function Legend() {
   )
 }
 
+/* ── Open-items board (right pane) ─────────────────────────────────────────── */
+
+function collectOpenItems(ladders) {
+  const items = []
+  for (const [ladderKey, versions] of Object.entries(ladders)) {
+    const sortedVersions = Object.keys(versions).sort(
+      (a, b) => parseInt(a.slice(1), 10) - parseInt(b.slice(1), 10)
+    )
+    for (const version of sortedVersions) {
+      for (const item of versions[version]) {
+        if (item.status === 'planned' || item.status === 'in_progress') {
+          items.push({ ...item, ladderKey, version })
+        }
+      }
+    }
+  }
+  return items
+}
+
+function ItemColumn({ item, onToggle }) {
+  const isActive = item.status === 'in_progress'
+  return (
+    <div className="flex-shrink-0 w-52 border border-slate-700 rounded-lg bg-slate-800/60 flex flex-col">
+      <div className="px-3 py-2.5 border-b border-slate-700">
+        <div className="flex items-center gap-2 mb-1">
+          <Glyph
+            status={item.status}
+            onClick={() => onToggle(item.ladderKey, item.version, item.title, item.id)}
+          />
+          <span className={`text-xs uppercase tracking-widest ${isActive ? 'text-teal-400' : 'text-slate-500'}`}>
+            {isActive ? 'In progress' : 'Planned'}
+          </span>
+        </div>
+        <div className="text-sm text-slate-200 leading-snug">{item.title}</div>
+      </div>
+      <div className="px-3 py-2 text-xs text-slate-600 flex items-center justify-between">
+        <span>{item.ladderKey} · {item.version}</span>
+      </div>
+    </div>
+  )
+}
+
+function OpenItemsBoard({ ladders, onToggle }) {
+  const openItems = collectOpenItems(ladders)
+
+  if (openItems.length === 0) {
+    return (
+      <div className="text-slate-600 italic text-sm py-4">
+        No open items — everything's either built or deferred.
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: 'thin', scrollbarColor: '#334155 transparent' }}>
+      {openItems.map((item) => (
+        <ItemColumn key={item.id} item={item} onToggle={onToggle} />
+      ))}
+    </div>
+  )
+}
+
 /* ── Main page ─────────────────────────────────────────────────────────────── */
 
 export default function DoPage() {
@@ -341,7 +403,7 @@ export default function DoPage() {
     <div className="min-h-screen bg-slate-900">
       {/* Header */}
       <header className="bg-gradient-to-r from-[#0f4c81] via-[#1a6fad] to-[#0d9488] text-white px-6 py-3">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
+        <div className="max-w-[90rem] mx-auto flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold tracking-tight">🌬️ Windy — Roadmap</h1>
             <p className="text-xs text-white/75">What we're building and where we're headed</p>
@@ -355,21 +417,32 @@ export default function DoPage() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-5 py-10">
+      <main className="max-w-[90rem] mx-auto px-5 py-10">
         <Legend />
 
-        <div className="flex flex-col md:flex-row gap-10">
-          {ladderKeys.map((key) => (
-            <LadderColumn
-              key={key}
-              title={key.charAt(0).toUpperCase() + key.slice(1)}
-              ladder={ladders[key]}
-              ladderKey={key}
-              onAdd={handleAdd}
-              onRemove={handleRemove}
-              onToggle={handleToggle}
-            />
-          ))}
+        <div className="flex flex-col lg:flex-row gap-10">
+          {/* Left pane — roadmap ladders */}
+          <div className="lg:w-80 flex-shrink-0">
+            <div className="flex flex-col gap-10">
+              {ladderKeys.map((key) => (
+                <LadderColumn
+                  key={key}
+                  title={key.charAt(0).toUpperCase() + key.slice(1)}
+                  ladder={ladders[key]}
+                  ladderKey={key}
+                  onAdd={handleAdd}
+                  onRemove={handleRemove}
+                  onToggle={handleToggle}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Right pane — open items board */}
+          <div className="flex-1 min-w-0">
+            <div className="text-xl text-teal-300 mb-3">Open</div>
+            <OpenItemsBoard ladders={ladders} onToggle={handleToggle} />
+          </div>
         </div>
       </main>
     </div>
